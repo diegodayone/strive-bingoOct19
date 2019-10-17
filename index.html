@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        #bingoBoard{
+            width:600px;
+        }
+
+        .bingoCell{
+            width:50px;
+            display:inline-block;
+            border:1px solid black;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        .selected{
+            background-color: orange;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="bingoBoard"></div>
+    <input type="button" onclick="randomNumber()" value="Get Random">
+
+    <div id="player"></div>
+
+
+    <script>
+    
+        window.onload = function(){
+
+            var bingo = document.querySelector("#bingoBoard")
+
+            for (var i = 0; i < 75; i++){
+                //create the cells
+                var div = document.createElement("div");
+                div.className = "bingoCell"
+                div.innerText = i +1;
+                bingo.appendChild(div)
+            }
+        }
+
+        var usedNumbers = []
+
+        function getNewRandom(){
+            var rnd = -1;
+            do {
+                if (usedNumbers.length == 75){
+                    alert("number finished")
+                    return;
+                }
+                rnd = Math.floor(Math.random() * 75);
+            }
+            while(usedNumbers.indexOf(rnd) !== -1) 
+            usedNumbers.push(rnd);
+
+            return rnd;
+        }
+
+        function randomNumber() {
+            //check if we already used the number
+            //if so, pick another one
+            //else, use it
+            //will run until the element has not been used
+            var rnd = getNewRandom(); //get random number
+            var cells = document.querySelectorAll(".bingoCell"); //get all the cells
+            myCell = cells[rnd - 1]; //get the cell in position random - 1 (ex: pos 40 => number 39)
+            myCell.classList.add("selected") //add the selected class
+
+            var playersCells = document.querySelectorAll("#player .bingoCell");
+            for(var i = 0; i < playersCells.length; i++){
+                if (playersCells[i].innerText == rnd)
+                    playersCells[i].classList.add("selected")
+            }
+        }
+
+        function createPlayerBoard(){
+            for (var i = 0; i < 20; i++){
+                //create the cells
+                var div = document.createElement("div");
+                div.className = "bingoCell"
+                div.innerText = Math.floor(Math.random() * 75)
+                document.querySelector("#player").appendChild(div)
+            }
+        }
+    
+    </script>
+</body>
+</html>
